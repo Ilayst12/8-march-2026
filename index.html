@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌷 8 марта, Наталья! 🌷</title>
-    <!-- Preload subtle spring sound (short melody) - using a more reliable source -->
-    <link rel="preload" as="audio" href="8MH.mp3" crossorigin="anonymous">
     <style>
+        /* Все стили остаются без изменений */
         * {
             margin: 0;
             padding: 0;
@@ -33,7 +32,6 @@
             100% { background: linear-gradient(145deg, #f9c9e2, #ffeab3, #c1e6f5); }
         }
 
-        /* floating petals / colourful blobs */
         .floating-blob {
             position: absolute;
             width: 120px;
@@ -72,7 +70,6 @@
             100% { transform: translate(10vw, 80vh) rotate(-120deg) scale(1.8); }
         }
 
-        /* main card */
         .card {
             position: relative;
             z-index: 20;
@@ -226,7 +223,6 @@
             100% { box-shadow: 0 0 0 5px #ffaccd; }
         }
 
-        /* background music control note */
         .hint {
             margin: 0.5rem 0;
             font-size: 1.4rem;
@@ -237,7 +233,6 @@
             display: inline-block;
         }
 
-        /* video simulation (animated colourful iframe / css) */
         .color-video-box {
             margin: 1.5rem 0 1rem;
             border-radius: 40px;
@@ -285,7 +280,6 @@
             to { transform: translateX(30px); }
         }
 
-        /* footer */
         .footer-note {
             margin-top: 2rem;
             font-size: 1.6rem;
@@ -295,7 +289,6 @@
             border-radius: 60px;
         }
 
-        /* canvas for extra particles */
         #confetti-canvas {
             position: fixed;
             top: 0;
@@ -308,7 +301,7 @@
     </style>
 </head>
 <body>
-    <!-- floating colourful blobs (video like) -->
+    <!-- floating colourful blobs -->
     <div class="floating-blob" style="top: 5%; left: 2%;"></div>
     <div class="floating-blob blob2" style="bottom: 0%; right: 0%;"></div>
     <div class="floating-blob blob3" style="top: 20%; right: 15%;"></div>
@@ -320,7 +313,7 @@
         <div class="subtitle">Дорогую маму</div>
         <div class="name-badge">НАТАЛЬЯ</div>
 
-        <!-- "video" area: colourful animation + emoji rain effect -->
+        <!-- "video" area -->
         <div class="color-video-box">
             <div class="fake-video">
                 <span class="emoji-cloud">🌸🌷🌼🌺🥀🌹🌻🌞💐🌸🌷🌼</span>
@@ -332,44 +325,48 @@
             💖 Мамочка, ты самая <br> прекрасная на свете! 💖
         </div>
 
-        <!-- colourful flower row with animation -->
+        <!-- colourful flower row -->
         <div class="flowers-row">
             <span>🌷</span> <span>🌹</span> <span>🌺</span> <span>🌸</span> <span>🌼</span> <span>🌻</span> <span>💐</span> <span>🌞</span>
         </div>
 
-        <!-- background music control (fixed button) -->
-        <audio id="bg-music" loop preload="auto" crossorigin="anonymous">
+        <!-- ВАРИАНТ 1: Если вы хотите использовать СВОЙ файл 8MH.mp3 -->
+        <!-- Положите файл 8MH.mp3 в ту же папку, где находится этот HTML файл -->
+        <audio id="bg-music" loop preload="auto">
             <source src="8MH.mp3" type="audio/mpeg">
-            <!-- fallback for browsers that don't support mp3 -->
-            <source src="8MH.mp3" type="audio/ogg">
             Your browser does not support audio.
         </audio>
+
+        <!-- ВАРИАНТ 2: Если файла нет, раскомментируйте строки ниже и закомментируйте аудио выше -->
+        <!-- 
+        <audio id="bg-music" loop preload="auto">
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+            <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
+        </audio>
+        -->
 
         <div class="music-icon" id="musicControl">
             <span id="musicIcon">🔇</span>
         </div>
         <div class="hint" id="musicHint">🎵 нажми на колонку для музыки 🎵</div>
 
-        <!-- footer with love -->
+        <!-- footer -->
         <div class="footer-note">
             💝 твой любящий сын 💝
         </div>
     </div>
 
-    <!-- hidden canvas for extra sparkle (animated) -->
+    <!-- canvas for confetti -->
     <canvas id="confetti-canvas"></canvas>
 
     <script>
         (function() {
-            // background music handling (fixed button)
             const audio = document.getElementById('bg-music');
             const musicControl = document.getElementById('musicControl');
             const musicIcon = document.getElementById('musicIcon');
             const hint = document.getElementById('musicHint');
             
             let isPlaying = false;
-            
-            // Устанавливаем низкую громкость для фона
             audio.volume = 0.4;
 
             // Функция переключения музыки
@@ -391,26 +388,24 @@
                             console.warn('Playback failed:', error);
                             hint.innerText = '😕 нажми ещё раз (нужно разрешение)';
                             musicIcon.innerText = '🔇';
-                            // Показываем более понятную подсказку
-                            setTimeout(() => {
-                                hint.innerText = '🎵 нажми на колонку снова 🎵';
-                            }, 1500);
                         });
                 }
             }
 
-            // Назначаем обработчик клика
             musicControl.addEventListener('click', toggleMusic);
+            
+            // Проверяем, загрузился ли аудиофайл
+            audio.addEventListener('error', (e) => {
+                console.warn('Audio error: файл не найден');
+                hint.innerText = '⚠️ файл 8MH.mp3 не найден, положи его в папку';
+                musicIcon.innerText = '❌';
+            });
 
-            // Предварительная загрузка аудио
+            // Загружаем аудио
             audio.load();
 
-            // Показываем подсказку
-            hint.innerText = '🎵 нажми на колонку для музыки 🎵';
-            musicIcon.innerText = '🔇';
-
             // ------------------------------------------------
-            // canvas confetti (colourful particles)
+            // canvas confetti (как в вашем коде)
             const canvas = document.getElementById('confetti-canvas');
             const ctx = canvas.getContext('2d');
             let width, height;
@@ -472,8 +467,6 @@
                     ctx.fillStyle = p.color;
                     ctx.shadowColor = 'white';
                     ctx.shadowBlur = 12;
-                    ctx.beginPath();
-                    // little flower shape
                     ctx.font = `${p.size+8}px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif`;
                     ctx.fillText('🌸', -15, 5);
                     ctx.restore();
@@ -495,24 +488,12 @@
             initParticles(70);
             animateConfetti();
 
-            // add extra interaction: if you click canvas area, maybe start music too?
+            // Если кликнуть по канвасу - тоже включить музыку
             canvas.addEventListener('click', () => {
                 if (!isPlaying) toggleMusic();
             });
 
-            // дополнительная инициализация: пробуем загрузить аудио заранее
-            document.addEventListener('DOMContentLoaded', () => {
-                audio.load();
-            });
-
-            // также добавим обработку ошибок сети для аудио
-            audio.addEventListener('error', (e) => {
-                console.warn('Audio error:', e);
-                hint.innerText = '⚠️ музыка не загрузилась, но настроение есть!';
-                musicIcon.innerText = '🎵';
-            });
-
-            // inject a few colourful animations via style dynamic (extra moving shadow)
+            // Добавляем декоративный стиль
             const style = document.createElement('style');
             style.innerHTML = `
                 .fake-video::after {
