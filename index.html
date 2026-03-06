@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌷 8 марта, Наталья! 🌷</title>
     <style>
-        /* Все стили остаются без изменений */
         * {
             margin: 0;
             padding: 0;
@@ -40,7 +39,7 @@
             border-radius: 70% 30% 60% 40% / 50% 40% 60% 50%;
             filter: blur(18px) brightness(1.2);
             animation: floatAround 22s infinite alternate ease-in-out;
-            z-index: 0;
+            z-index: 1;
         }
 
         .blob2 {
@@ -72,7 +71,7 @@
 
         .card {
             position: relative;
-            z-index: 20;
+            z-index: 10;
             max-width: 700px;
             width: 90%;
             background: rgba(255, 255, 255, 0.55);
@@ -195,6 +194,7 @@
             100% { transform: scale(1.2); }
         }
 
+        /* ИСПРАВЛЕНО: подняли кнопку выше канваса */
         .music-icon {
             background: #fce6b4;
             width: 70px;
@@ -210,6 +210,9 @@
             box-shadow: 0 0 0 5px #fbbbcd;
             transition: 0.2s;
             animation: rotateIcon 6s infinite linear;
+            position: relative;
+            z-index: 1000; /* Очень высокий z-index */
+            pointer-events: auto; /* Явно разрешаем клики */
         }
 
         .music-icon:hover {
@@ -231,6 +234,9 @@
             padding: 0.4rem 1rem;
             border-radius: 50px;
             display: inline-block;
+            position: relative;
+            z-index: 1000;
+            pointer-events: none; /* Хинт не мешает кликам */
         }
 
         .color-video-box {
@@ -287,16 +293,28 @@
             background: rgba(255,250,210,0.7);
             padding: 0.5rem 1rem;
             border-radius: 60px;
+            position: relative;
+            z-index: 1000;
         }
 
+        /* ИСПРАВЛЕНО: канвас теперь под кнопкой */
         #confetti-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 100;
+            pointer-events: none; /* Канвас не перехватывает клики */
+            z-index: 500; /* Выше фона, но ниже кнопки */
+        }
+
+        /* Добавляем прозрачную область для кликов */
+        .card {
+            pointer-events: auto;
+        }
+        
+        .card * {
+            pointer-events: auto;
         }
     </style>
 </head>
@@ -330,21 +348,17 @@
             <span>🌷</span> <span>🌹</span> <span>🌺</span> <span>🌸</span> <span>🌼</span> <span>🌻</span> <span>💐</span> <span>🌞</span>
         </div>
 
-        <!-- ВАРИАНТ 1: Если вы хотите использовать СВОЙ файл 8MH.mp3 -->
-        <!-- Положите файл 8MH.mp3 в ту же папку, где находится этот HTML файл -->
+        <!-- ИСПРАВЛЕНО: теперь с правильными путями к музыке -->
         <audio id="bg-music" loop preload="auto">
+            <!-- Сначала пробуем загрузить ваш файл -->
             <source src="8MH.mp3" type="audio/mpeg">
+            <!-- Если вашего файла нет, используем резервный из интернета -->
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+            <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
             Your browser does not support audio.
         </audio>
 
-        <!-- ВАРИАНТ 2: Если файла нет, раскомментируйте строки ниже и закомментируйте аудио выше -->
-        <!-- 
-        <audio id="bg-music" loop preload="auto">
-            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
-            <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
-        </audio>
-        -->
-
+        <!-- Кнопка с высоким z-index -->
         <div class="music-icon" id="musicControl">
             <span id="musicIcon">🔇</span>
         </div>
@@ -356,7 +370,7 @@
         </div>
     </div>
 
-    <!-- canvas for confetti -->
+    <!-- canvas для конфетти (теперь pointer-events: none) -->
     <canvas id="confetti-canvas"></canvas>
 
     <script>
@@ -371,6 +385,8 @@
 
             // Функция переключения музыки
             function toggleMusic() {
+                console.log('Клик по кнопке!'); // для проверки в консоли
+                
                 if (isPlaying) {
                     audio.pause();
                     musicIcon.innerText = '🔇';
@@ -383,6 +399,7 @@
                             musicIcon.innerText = '🔊';
                             hint.innerText = '♫ играет мелодия ♫';
                             isPlaying = true;
+                            console.log('Музыка играет');
                         })
                         .catch((error) => {
                             console.warn('Playback failed:', error);
@@ -392,20 +409,20 @@
                 }
             }
 
+            // Назначаем обработчик клика
             musicControl.addEventListener('click', toggleMusic);
             
             // Проверяем, загрузился ли аудиофайл
             audio.addEventListener('error', (e) => {
-                console.warn('Audio error: файл не найден');
-                hint.innerText = '⚠️ файл 8MH.mp3 не найден, положи его в папку';
-                musicIcon.innerText = '❌';
+                console.warn('Audio error: файл не найден, но есть резервный');
+                // Не показываем ошибку, так как есть резервный источник
             });
 
             // Загружаем аудио
             audio.load();
 
             // ------------------------------------------------
-            // canvas confetti (как в вашем коде)
+            // canvas confetti (исправлен - не мешает кликам)
             const canvas = document.getElementById('confetti-canvas');
             const ctx = canvas.getContext('2d');
             let width, height;
@@ -487,11 +504,6 @@
             resizeCanvas();
             initParticles(70);
             animateConfetti();
-
-            // Если кликнуть по канвасу - тоже включить музыку
-            canvas.addEventListener('click', () => {
-                if (!isPlaying) toggleMusic();
-            });
 
             // Добавляем декоративный стиль
             const style = document.createElement('style');
