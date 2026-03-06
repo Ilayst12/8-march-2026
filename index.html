@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌷 8 марта, Наталья! 🌷</title>
+    <!-- Preload subtle spring sound (short melody) - using a more reliable source -->
+    <link rel="preload" as="audio" href="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" crossorigin="anonymous">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #f9c9e2 0%, #ffeab3 50%, #c1e6f5 100%);
+            font-family: 'Segoe UI', 'Comic Sans MS', 'Chalkboard', cursive, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+            animation: pastelWave 16s infinite alternate ease-in-out;
+        }
+
+        @keyframes pastelWave {
+            0% { background: linear-gradient(145deg, #f9c9e2, #ffeab3, #c1e6f5); }
+            25% { background: linear-gradient(145deg, #ffd5b5, #f5e6b8, #b3e0f0); }
+            50% { background: linear-gradient(145deg, #fcd5e8, #fff1c4, #b8dcf2); }
+            75% { background: linear-gradient(145deg, #fed9e6, #fce9b4, #c3e2f7); }
+            100% { background: linear-gradient(145deg, #f9c9e2, #ffeab3, #c1e6f5); }
+        }
+
+        /* floating petals / colourful blobs */
+        .floating-blob {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 220, 240, 0.35);
+            border-radius: 70% 30% 60% 40% / 50% 40% 60% 50%;
+            filter: blur(18px) brightness(1.2);
+            animation: floatAround 22s infinite alternate ease-in-out;
+            z-index: 0;
+        }
+
+        .blob2 {
+            width: 200px;
+            height: 200px;
+            background: rgba(180, 230, 255, 0.4);
+            border-radius: 40% 60% 30% 70% / 60% 40% 70% 30%;
+            filter: blur(24px);
+            animation: floatAround2 19s infinite alternate;
+        }
+
+        .blob3 {
+            width: 160px;
+            height: 160px;
+            background: rgba(255, 245, 160, 0.45);
+            border-radius: 60% 40% 50% 50% / 30% 60% 40% 70%;
+            filter: blur(20px);
+            animation: floatAround 25s infinite alternate-reverse;
+        }
+
+        @keyframes floatAround {
+            0% { transform: translate(10vw, 10vh) rotate(0deg) scale(1); }
+            100% { transform: translate(70vw, 60vh) rotate(180deg) scale(1.5); }
+        }
+        @keyframes floatAround2 {
+            0% { transform: translate(60vw, 5vh) rotate(0deg) scale(1.2); }
+            100% { transform: translate(10vw, 80vh) rotate(-120deg) scale(1.8); }
+        }
+
+        /* main card */
+        .card {
+            position: relative;
+            z-index: 20;
+            max-width: 700px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(12px);
+            border-radius: 60px 20px 60px 20px;
+            box-shadow: 0 30px 50px rgba(255, 140, 200, 0.25), 0 10px 30px rgba(0,0,0,0.1), inset 0 0 0 2px rgba(255,255,255,0.7);
+            padding: 2rem 2rem 3rem;
+            text-align: center;
+            border: 4px solid white;
+            animation: cardGlow 4s infinite alternate;
+        }
+
+        @keyframes cardGlow {
+            0% { box-shadow: 0 20px 50px #ffb3c6, 0 10px 30px #ffe099, inset 0 0 0 3px #fff; }
+            100% { box-shadow: 0 30px 70px #f7a1c4, 0 15px 40px #ffe55c, inset 0 0 0 6px #fffaec; }
+        }
+
+        h1 {
+            font-size: 4.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #d4426e, #bb3f5a, #d26878, #ffb347, #ffdb7e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.2rem;
+            text-shadow: 2px 2px 20px rgba(255,255,180,0.8);
+            letter-spacing: 2px;
+            animation: sparkle 1.8s infinite;
+        }
+
+        @keyframes sparkle {
+            0% { filter: drop-shadow(0 0 5px gold); }
+            50% { filter: drop-shadow(0 0 18px #ffb3d9) drop-shadow(0 0 8px #ffeeaa); }
+            100% { filter: drop-shadow(0 0 5px gold); }
+        }
+
+        .subtitle {
+            font-size: 2rem;
+            font-weight: 500;
+            background: linear-gradient(135deg, #b34180, #ec6f86);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0.5rem 0 1rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            animation: softBlink 2.2s infinite;
+        }
+
+        @keyframes softBlink {
+            0% { opacity: 1; text-shadow: 0 0 5px #ffbfd6; }
+            50% { opacity: 0.9; text-shadow: 0 0 20px magenta, 0 0 5px cyan; }
+            100% { opacity: 1; text-shadow: 0 0 5px #ffbfd6; }
+        }
+
+        .name-badge {
+            background: rgba(255, 245, 215, 0.7);
+            border-radius: 100px;
+            display: inline-block;
+            padding: 0.5rem 2rem;
+            margin: 1rem 0 1.5rem;
+            font-size: 3.2rem;
+            font-weight: bold;
+            color: #b6336e;
+            border: 4px dotted #ff86b3;
+            box-shadow: 0 0 0 5px #fef1ca, 0 0 0 8px #ffc5a0;
+            transform: rotate(-1deg);
+            animation: borderPulse 1.4s infinite alternate;
+        }
+
+        @keyframes borderPulse {
+            from { border-color: #ff86b3; box-shadow: 0 0 0 5px #fef1ca, 0 0 0 8px #ffc5a0; }
+            to { border-color: #ffdb7e; box-shadow: 0 0 0 8px #ffe3b0, 0 0 0 12px #ff95b6; }
+        }
+
+        .message {
+            font-size: 1.8rem;
+            color: #3c2b4b;
+            background: rgba(255, 255, 240, 0.6);
+            border-radius: 40px 10px 40px 10px;
+            padding: 1.2rem;
+            margin: 1rem 0 1.5rem;
+            line-height: 1.5;
+            font-weight: 500;
+            border-left: 12px solid #ffa0c5;
+            border-right: 12px solid #ffe381;
+            box-shadow: inset 0 -2px 10px #ffefc0;
+        }
+
+        .flowers-row {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem 1.5rem;
+            flex-wrap: wrap;
+            margin: 2rem 0 1rem;
+            font-size: 3.5rem;
+            filter: drop-shadow(0 8px 10px #fbaac3);
+            animation: wiggle 3s infinite;
+        }
+
+        @keyframes wiggle {
+            0%,100% { transform: rotate(0deg); }
+            25% { transform: rotate(3deg); }
+            75% { transform: rotate(-3deg); }
+        }
+
+        .flowers-row span {
+            display: inline-block;
+            animation: flowerPop 2.4s infinite alternate;
+            transition: all 0.2s;
+        }
+
+        .flowers-row span:hover {
+            transform: scale(1.5) rotate(10deg);
+            filter: drop-shadow(0 0 7px hotpink);
+        }
+
+        @keyframes flowerPop {
+            0% { transform: scale(0.9); }
+            100% { transform: scale(1.2); }
+        }
+
+        .music-icon {
+            background: #fce6b4;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto 0;
+            font-size: 2.2rem;
+            border: 4px solid white;
+            cursor: pointer;
+            box-shadow: 0 0 0 5px #fbbbcd;
+            transition: 0.2s;
+            animation: rotateIcon 6s infinite linear;
+        }
+
+        .music-icon:hover {
+            transform: scale(1.2);
+            background: #ffeab3;
+        }
+
+        @keyframes rotateIcon {
+            0% { box-shadow: 0 0 0 5px #ffaccd; }
+            50% { box-shadow: 0 0 0 12px #ffdc9f; }
+            100% { box-shadow: 0 0 0 5px #ffaccd; }
+        }
+
+        /* background music control note */
+        .hint {
+            margin: 0.5rem 0;
+            font-size: 1.4rem;
+            color: #a64d79;
+            background: rgba(255,255,200,0.7);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        /* video simulation (animated colourful iframe / css) */
+        .color-video-box {
+            margin: 1.5rem 0 1rem;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #ffbcd6;
+            background: #000;
+            border: 5px solid white;
+            aspect-ratio: 16 / 9;
+        }
+
+        .fake-video {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #feac9d, #f5c1d6, #b8e0ff, #c3e6cb, #fff1b8);
+            background-size: 400% 400%;
+            animation: gradientPan 8s infinite, overlaySpark 3s infinite;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            text-shadow: 4px 4px 0 #f35a9b, 6px 6px 0 #f9d56b;
+        }
+
+        @keyframes gradientPan {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        @keyframes overlaySpark {
+            0%,100% { opacity: 0.9; }
+            50% { opacity: 1; box-shadow: inset 0 0 60px rgba(255,255,255,0.8); }
+        }
+
+        .emoji-cloud {
+            font-size: 3.3rem;
+            animation: cloudMove 15s infinite alternate;
+            white-space: nowrap;
+        }
+
+        @keyframes cloudMove {
+            from { transform: translateX(-30px); }
+            to { transform: translateX(30px); }
+        }
+
+        /* footer */
+        .footer-note {
+            margin-top: 2rem;
+            font-size: 1.6rem;
+            color: #df5286;
+            background: rgba(255,250,210,0.7);
+            padding: 0.5rem 1rem;
+            border-radius: 60px;
+        }
+
+        /* canvas for extra particles */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <!-- floating colourful blobs (video like) -->
+    <div class="floating-blob" style="top: 5%; left: 2%;"></div>
+    <div class="floating-blob blob2" style="bottom: 0%; right: 0%;"></div>
+    <div class="floating-blob blob3" style="top: 20%; right: 15%;"></div>
+    <div class="floating-blob" style="bottom: 20%; left: 15%; background: rgba(210, 240, 170, 0.45); filter: blur(30px);"></div>
+
+    <!-- main card -->
+    <div class="card">
+        <h1>🌸 С 8 марта! 🌸</h1>
+        <div class="subtitle">Дорогую маму</div>
+        <div class="name-badge">НАТАЛЬЯ</div>
+
+        <!-- "video" area: colourful animation + emoji rain effect -->
+        <div class="color-video-box">
+            <div class="fake-video">
+                <span class="emoji-cloud">🌸🌷🌼🌺🥀🌹🌻🌞💐🌸🌷🌼</span>
+            </div>
+        </div>
+
+        <!-- heart message -->
+        <div class="message">
+            💖 Мамочка, ты самая <br> прекрасная на свете! 💖
+        </div>
+
+        <!-- colourful flower row with animation -->
+        <div class="flowers-row">
+            <span>🌷</span> <span>🌹</span> <span>🌺</span> <span>🌸</span> <span>🌼</span> <span>🌻</span> <span>💐</span> <span>🌞</span>
+        </div>
+
+        <!-- background music control (fixed button) -->
+        <audio id="bg-music" loop preload="auto" crossorigin="anonymous">
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+            <!-- fallback for browsers that don't support mp3 -->
+            <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
+            Your browser does not support audio.
+        </audio>
+
+        <div class="music-icon" id="musicControl">
+            <span id="musicIcon">🔇</span>
+        </div>
+        <div class="hint" id="musicHint">🎵 нажми на колонку для музыки 🎵</div>
+
+        <!-- footer with love -->
+        <div class="footer-note">
+            💝 твой любящий сын 💝
+        </div>
+    </div>
+
+    <!-- hidden canvas for extra sparkle (animated) -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <script>
+        (function() {
+            // background music handling (fixed button)
+            const audio = document.getElementById('bg-music');
+            const musicControl = document.getElementById('musicControl');
+            const musicIcon = document.getElementById('musicIcon');
+            const hint = document.getElementById('musicHint');
+            
+            let isPlaying = false;
+            
+            // Устанавливаем низкую громкость для фона
+            audio.volume = 0.4;
+
+            // Функция переключения музыки
+            function toggleMusic() {
+                if (isPlaying) {
+                    audio.pause();
+                    musicIcon.innerText = '🔇';
+                    hint.innerText = '🎵 музыка выкл., нажми включить 🎵';
+                    isPlaying = false;
+                } else {
+                    // Пытаемся воспроизвести
+                    audio.play()
+                        .then(() => {
+                            musicIcon.innerText = '🔊';
+                            hint.innerText = '♫ играет мелодия ♫';
+                            isPlaying = true;
+                        })
+                        .catch((error) => {
+                            console.warn('Playback failed:', error);
+                            hint.innerText = '😕 нажми ещё раз (нужно разрешение)';
+                            musicIcon.innerText = '🔇';
+                            // Показываем более понятную подсказку
+                            setTimeout(() => {
+                                hint.innerText = '🎵 нажми на колонку снова 🎵';
+                            }, 1500);
+                        });
+                }
+            }
+
+            // Назначаем обработчик клика
+            musicControl.addEventListener('click', toggleMusic);
+
+            // Предварительная загрузка аудио
+            audio.load();
+
+            // Показываем подсказку
+            hint.innerText = '🎵 нажми на колонку для музыки 🎵';
+            musicIcon.innerText = '🔇';
+
+            // ------------------------------------------------
+            // canvas confetti (colourful particles)
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+
+            function resizeCanvas() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+            }
+
+            function random(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            function createParticle() {
+                return {
+                    x: random(0, width),
+                    y: random(-height, 0),
+                    size: random(5, 15),
+                    speedY: random(1, 6),
+                    speedX: random(-1, 1.5),
+                    color: `hsl(${random(0, 360)}, 80%, 70%)`,
+                    rotation: random(0, 360),
+                };
+            }
+
+            function initParticles(count = 80) {
+                particles = [];
+                for (let i = 0; i < count; i++) {
+                    particles.push(createParticle());
+                }
+            }
+
+            function updateParticles() {
+                for (let p of particles) {
+                    p.y += p.speedY * 0.7;
+                    p.x += p.speedX * 0.5;
+                    p.rotation += 0.5;
+
+                    if (p.y > height + 20) {
+                        p.y = -20;
+                        p.x = random(0, width);
+                        p.speedY = random(2, 7);
+                        p.color = `hsl(${random(0, 360)}, 85%, 65%)`;
+                    }
+                    if (p.x > width + 20) p.x = -20;
+                    if (p.x < -20) p.x = width + 20;
+                }
+            }
+
+            function drawParticles() {
+                ctx.clearRect(0, 0, width, height);
+                for (let p of particles) {
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rotation * Math.PI) / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.shadowColor = 'white';
+                    ctx.shadowBlur = 12;
+                    ctx.beginPath();
+                    // little flower shape
+                    ctx.font = `${p.size+8}px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif`;
+                    ctx.fillText('🌸', -15, 5);
+                    ctx.restore();
+                }
+            }
+
+            function animateConfetti() {
+                updateParticles();
+                drawParticles();
+                requestAnimationFrame(animateConfetti);
+            }
+
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                initParticles(60);
+            });
+
+            resizeCanvas();
+            initParticles(70);
+            animateConfetti();
+
+            // add extra interaction: if you click canvas area, maybe start music too?
+            canvas.addEventListener('click', () => {
+                if (!isPlaying) toggleMusic();
+            });
+
+            // дополнительная инициализация: пробуем загрузить аудио заранее
+            document.addEventListener('DOMContentLoaded', () => {
+                audio.load();
+            });
+
+            // также добавим обработку ошибок сети для аудио
+            audio.addEventListener('error', (e) => {
+                console.warn('Audio error:', e);
+                hint.innerText = '⚠️ музыка не загрузилась, но настроение есть!';
+                musicIcon.innerText = '🎵';
+            });
+
+            // inject a few colourful animations via style dynamic (extra moving shadow)
+            const style = document.createElement('style');
+            style.innerHTML = `
+                .fake-video::after {
+                    content: "✨💖✨";
+                    position: absolute;
+                    bottom: 10px;
+                    right: 20px;
+                    font-size: 2rem;
+                    opacity: 0.7;
+                    animation: shine 1.5s infinite alternate;
+                }
+                @keyframes shine {
+                    from { text-shadow: 0 0 5px magenta; }
+                    to { text-shadow: 0 0 20px cyan; }
+                }
+            `;
+            document.head.appendChild(style);
+        })();
+    </script>
+</body>
+</html>
